@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    
+    <! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! — >
+    <! !!!– Sección de los scripts !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! — >
+
+    <script type="text/javascript">
+      var cadena, cod, respuesta;
+      var tener = RegExp("(TIENE|TIENES|TENGO|TENES)");
+      var edad = /AÑOS/;
+      
+      function evaluarEdad () {
+        cadena = document.getElementById("textPregunta").value;
+        cadena = cadena.toUpperCase(); 
+
+        document.getElementById("resultado1").innerHTML=tener.test(cadena);
+        document.getElementById("resultado2").innerHTML=edad.test(cadena);
+ 
+        if (tener.test(cadena)==true && edad.test(cadena)==true) {
+            cod=4
+        }
+
+        responder(); 
+
+      }
+
+      function responder () {
+      
+      switch (cod) {
+        
+        case 4:
+        
+        mensaje = "tengo 30 años";
+
+        break;
+
+        case 5: 
+
+        break;
+
+        default: 
+      }
+
+        document.getElementById("respuesta").innerHTML = mensaje;
+
+      }
+
+
+    </script>
+    <! Fin de script !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! — >
+    <! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! — >
+
+
+  <title>OLI Bot</title>
+  </head>
+
+  <body>
+    <h1>OLI Bot</h1>
+    <input type="text" name="name" value="" id="textPregunta" size="80">
+    <input type="button" name="name" value="Preguntar" onclick="evaluarEdad()">
+  </body>
+
+  <p id="resultado1">
+  </p>
+  <p id="resultado2">
+  </p>
+  <p id="respuesta">
+  </p>
+
+</html>
