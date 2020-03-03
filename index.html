@@ -1,66 +1,139 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    
-    <! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! — >
-    <! !!!– Sección de los scripts !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! — >
+<html lang="esp" dir="ltr">
 
-    <script type="text/javascript">
-      var cadena, cod, respuesta;
-      var tener = RegExp("(TIENE|TIENES|TENGO|TENES)");
-      var edad = /AÑOS/;
-      
-      function evaluarEdad () {
-        cadena = document.getElementById("textPregunta").value;
-        cadena = cadena.toUpperCase(); 
+<style>
+  table {
+    border-collapse: collapse;
+  }
 
-        document.getElementById("resultado1").innerHTML=tener.test(cadena);
-        document.getElementById("resultado2").innerHTML=edad.test(cadena);
- 
-        if (tener.test(cadena)==true && edad.test(cadena)==true) {
-            cod=4
-        }
+  table,
+  td,
+  th {
+    border: 2px solid orange;
+    padding: 20px;
+  }
 
-        responder(); 
+  button {
+    color: white;
+    font-weight: bold;
+    background-color: orange;
+    width: 100px;
+    height: 25px;
+    font-size: 15px;
+  }
+</style>
 
-      }
-
-      function responder () {
-      
-      switch (cod) {
-        
-        case 4:
-        
-        mensaje = "tengo 30 años";
-
-        break;
-
-        case 5: 
-
-        break;
-
-        default: 
-      }
-
-        document.getElementById("respuesta").innerHTML = mensaje;
-
-      }
-
-
-    </script>
-    <! Fin de script !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! — >
-    <! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! — >
-
-
+<head>
+  <meta charset="utf-8">
   <title>OLI Bot</title>
-  </head>
+  <script type="text/javascript">
+    var cadena, cod, respuesta;
+    var tener = RegExp("(TIENE|TIENES|TENGO|TENES)");
+    var edad = /AÑO/;
+    var saludo = RegExp("(HOLA|HI|HABLA|HLA|HOLI)");
+    var modalidad = RegExp("(PREPAGO|PPAGO|PRE|POSTPAGO|POST|CONTROL)");
+    var rango = RegExp("(ENTRE|RANGO|MENORES|MAYORES|QUE HAY)");
+    var datos = RegExp("(MEGAS|GIGAS|MB|GB)");
+    var dinero = RegExp("(SOLES|S/|S/.|LUKAS|LUCAS|SO)");
+    var operador = RegExp("(CLARO|A.MOVIL|AMERICA MOVIL|MOVISTAR|TELEFONICA|TDP|ENTEL|BITEL|VIETTEL|VITEL)")
+    var unico = RegExp("(SOLO|ACTIVA)");
+    var plan = RegExp("(PLAN|TARIFA)");
 
-  <body>
-    <h1>OLI Bot</h1>
-    <input type="text" name="name" value="" id="textPregunta" size="80">
-    <input type="button" name="name" value="Preguntar" onclick="evaluarEdad()">
-  </body>
+
+
+    function enter() {
+      if (event.keyCode == 13) {
+        evaluarTexto();
+      }
+    }
+
+    function evaluarTexto() {
+      cadena = document.getElementById("textPregunta").value;
+      cadena = cadena.toUpperCase();
+
+      var regex = /(\d+)/g;
+      var result = cadena.match(regex);
+      //alert(result.length);
+
+      document.getElementById("resultado1").innerHTML = plan.test(cadena);
+      //document.getElementById("resultado2").innerHTML = operador.test(cadena);
+
+      if (saludo.test(cadena) == true) { cod = 1 }
+
+      if (rango.test(cadena) == true && dinero.test(cadena) == true || dinero.test(cadena) == true && result.length == 1) 
+      { cod = 2 }
+
+      if (rango.test(cadena) == true && datos.test(cadena) == true) { cod = 3 }
+
+      if (tener.test(cadena) == true && edad.test(cadena) == true) { cod = 4 }
+
+      if (operador.test(cadena) == true && unico.test(cadena) == true) { cod = 5 }
+
+      setTimeout(responder, 500);
+      document.getElementById("textPregunta").value = "";
+    }
+
+    function responder() {
+      switch (cod) {
+        case 1:
+          mensaje = "Hola como estas, en que puedo ayudarte";
+          cod = 0;
+          break
+
+        case 2:
+          mensaje = "Se encontraron ## planes de xx soles"; //Moneda
+          cod = 0;
+          break;
+
+        case 3:
+          mensaje = "Se encontraron ## planes de datos"; //Capacidad
+          cod = 0;
+          break;
+
+        case 4:
+          mensaje = "tengo 20 años";
+          cod = 0;
+          setTimeout(probando2, 3000);
+          break;
+
+        case 5:
+          mensaje = "se encontraron ## planes del operador Xyyyyy"; //
+          cod = 0;
+          break;
+
+        default:
+          document.getElementById("textPregunta").value = "";
+          mensaje = "No entiendo lo que me dices, reescribe tu pregunta porfa :P";
+          guardar();
+      }
+      document.getElementById("respuesta").innerHTML = mensaje;
+    }
+
+    function guardar() {
+      var d = new Date();
+      var _fra = cadena;//document.getElementById("textPregunta").value;
+      var _fec = d.toDateString();
+      var _hor = d.toLocaleTimeString();
+      var fila = "<tr><td>" + _fra + "</td><td>" + _fec + "</td><td>" + _hor + "</td></tr>";
+      var btn = document.createElement("TR");
+
+      btn.innerHTML = fila;
+      document.getElementById("tablita").appendChild(btn);
+    }
+
+    function probando2() {
+      mensaje = "y tú, que edad tienes"
+      document.getElementById("respuesta").innerHTML = mensaje;
+    }
+  </script>
+</head>
+
+<body>
+  <h1>OLI Bot</h1>
+  <input type="text" name="name" value="" id="textPregunta" size="80" placeholder="Escribe tu pregunta..."
+    onkeydown="enter()">
+
+  <input type="button" name="name" value="Preguntar" onclick="evaluarTexto()">
 
   <p id="resultado1">
   </p>
@@ -68,5 +141,24 @@
   </p>
   <p id="respuesta">
   </p>
+
+  <p>Elementos en la Tabla:
+    <div id="adicionados"></div>
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Frase</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+      </tr>
+    </thead>
+    <tbody id="tablita">
+
+    </tbody>
+  </table>
+
+</body>
 
 </html>
